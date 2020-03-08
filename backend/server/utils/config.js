@@ -21,6 +21,12 @@ var config = convict({
     default: '8080',
     env: 'PORT'
   },
+  cronInterval: {
+    doc: 'The interval used for the cron job.',
+    format: '*',
+    default: '* * * * *',
+    env: 'CRON_INTERVAL'
+  },
   teamspeak: {
     host: {
       doc: 'The TeamSpeak server host address.',

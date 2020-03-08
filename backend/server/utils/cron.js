@@ -1,9 +1,10 @@
 import cron from 'node-cron'
 import { compareGroups } from './compareGroups'
+import config from './config'
 import logger from './winston'
 
 // Cronjob
-cron.schedule('*/2 * * * *', async () => {
+cron.schedule(config.get('cronInterval'), async () => {
   try {
     await compareGroups()
   } catch (e) {
