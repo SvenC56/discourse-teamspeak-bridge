@@ -40,7 +40,7 @@
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vue-moment": "^4.1.0",
-    "vuetify": "^2.2.17"
+    "vuetify": "^2.2.18"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "^4.2.3",
