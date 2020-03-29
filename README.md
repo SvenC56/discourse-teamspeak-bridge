@@ -2,7 +2,7 @@
 
 It Ain't Much But It's Honest Work
 
-[![Build Status](https://travis-ci.com/SvenC56/discourse-teamspeak-bridge.svg?branch=master)](https://travis-ci.com/SvenC56/discourse-teamspeak-bridge)
+[![Build Status](https://drone.sc-web.de/api/badges/SvenC56/discourse-teamspeak-bridge/status.svg)](https://drone.sc-web.de/SvenC56/discourse-teamspeak-bridge)
 
 ## Getting started
 
