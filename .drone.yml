@@ -5,7 +5,7 @@ steps:
   - name: docker
     image: plugins/docker
     settings:
-      repo: SvenC56/discourse-teamspeak-bridge
+      repo: svenc56/discourse-teamspeak-bridge
       username:
         from_secret: docker_username
       password:
