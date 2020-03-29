@@ -11,5 +11,3 @@ steps:
       password:
         from_secret: docker_password
       auto_tag: true
-      tags:
-        - latest
