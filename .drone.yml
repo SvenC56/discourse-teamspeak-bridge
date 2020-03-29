@@ -1,0 +1,15 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: docker
+    image: plugins/docker
+    settings:
+      repo: SvenC56/discourse-teamspeak-bridge
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      auto_tag: true
+      tags:
+        - latest
