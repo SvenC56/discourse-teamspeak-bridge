@@ -9,6 +9,7 @@ steps:
       repo: svenc56/discourse-teamspeak-bridge
       dockerfile: Dockerfile
       auto_tag: true
+      auto_tag_suffix: alpine
       username:
         from_secret: docker_username
       password:
