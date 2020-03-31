@@ -98,7 +98,7 @@ if (dev) {
   baseURL = process.env.BASE_URL
 }
 const instance = axios.create({
-  baseURL
+  baseURL,
 })
 
 export default {
@@ -118,28 +118,28 @@ export default {
       tsid: 0,
       dcid: 0,
       rowid: 0,
-      protectedgroup: 0
+      protectedgroup: 0,
     },
     defaultItem: {
       name: '',
       tsid: 0,
       dcid: 0,
       rowid: 0,
-      protectedgroup: 0
+      protectedgroup: 0,
     },
     headers: [
       { text: 'Servergroup Name', value: 'name' },
       { text: 'TeamSpeak ID', value: 'tsid', sortable: false },
       { text: 'Discourse ID', value: 'dcid', sortable: false },
       { text: 'Protected', value: 'protectedgroup', sortable: false },
-      { text: 'Actions', value: 'action', sortable: false }
-    ]
+      { text: 'Actions', value: 'action', sortable: false },
+    ],
   }),
 
   watch: {
     dialog(val) {
       val || this.close()
-    }
+    },
   },
 
   created() {
@@ -155,7 +155,7 @@ export default {
       await Promise.all([
         this.getTeamSpeakUserGroups(),
         this.getDiscourseUsergroups(),
-        this.getAssignments()
+        this.getAssignments(),
       ])
       this.loaded = true
     },
@@ -204,7 +204,7 @@ export default {
       if (isConfirmed) {
         try {
           await instance.delete('/api/assignments', {
-            data: { id }
+            data: { id },
           })
         } catch (e) {
           this.error = e.response
@@ -246,7 +246,7 @@ export default {
         }
       }
       this.close()
-    }
-  }
+    },
+  },
 }
 </script>

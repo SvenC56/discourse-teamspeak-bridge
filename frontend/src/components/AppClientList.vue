@@ -41,7 +41,12 @@
               </v-chip></v-list-item-title
             >
             <v-list-item-subtitle
-              style="-webkit-user-select: all; -moz-user-select: all; -ms-user-select: all; user-select: all;"
+              style="
+                -webkit-user-select: all;
+                -moz-user-select: all;
+                -ms-user-select: all;
+                user-select: all;
+              "
               v-text="item.client_unique_identifier"
             ></v-list-item-subtitle>
             <span
@@ -82,7 +87,7 @@ if (dev) {
   baseURL = process.env.BASE_URL
 }
 const instance = axios.create({
-  baseURL
+  baseURL,
 })
 
 export default {
@@ -92,7 +97,7 @@ export default {
     loaded: false,
     teamspeakUserGroups: [],
     clientList: [],
-    serverinfo: null
+    serverinfo: null,
   }),
 
   async created() {
@@ -108,7 +113,7 @@ export default {
       await Promise.all([
         this.getTeamSpeakUserGroups(),
         this.getServerinfo(),
-        this.getClientList()
+        this.getClientList(),
       ])
       this.loaded = true
     },
@@ -135,7 +140,7 @@ export default {
       } catch (e) {
         throw e
       }
-    }
-  }
+    },
+  },
 }
 </script>

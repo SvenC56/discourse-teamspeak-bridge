@@ -30,7 +30,7 @@ export default {
   components: {
     AppClientList,
     AppLogs,
-    AppAssginmentTable
+    AppAssginmentTable,
   },
 
   data: () => ({
@@ -55,7 +55,7 @@ export default {
       return JSON.parse(
         `{"default":"${def}", ${xsString}, ${smString}, ${mdString}, ${lgString}}`
       )
-    }
-  }
+    },
+  },
 }
 </script>

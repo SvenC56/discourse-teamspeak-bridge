@@ -36,7 +36,7 @@ if (dev) {
   baseURL = process.env.BASE_URL
 }
 const instance = axios.create({
-  baseURL
+  baseURL,
 })
 
 export default {
@@ -44,7 +44,7 @@ export default {
 
   data: () => ({
     logs: [],
-    loaded: false
+    loaded: false,
   }),
 
   async created() {
@@ -61,7 +61,7 @@ export default {
       } catch (e) {
         throw e
       }
-    }
-  }
+    },
+  },
 }
 </script>
