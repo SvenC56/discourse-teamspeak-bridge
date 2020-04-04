@@ -16,7 +16,7 @@ router.get('/healthcheck', async (req, res, next) => {
     const response = {
       server: 'up',
       teamspeak: teamspeakServer.getState(),
-      discourse: discourseServer.getState()
+      discourse: discourseServer.getState(),
     }
     await res.status(200).json(response)
   } catch (e) {
@@ -28,7 +28,7 @@ router.get('/trigger', async (req, res, next) => {
   try {
     await compareGroups()
     await res.status(200).json({
-      message: 'Completed!'
+      message: 'Completed!',
     })
   } catch (e) {
     console.log(e)
@@ -71,7 +71,7 @@ router.patch('/assignments', async (req, res, next) => {
       'name',
       'dcid',
       'tsid',
-      'protectedgroup'
+      'protectedgroup',
     ])
     const response = await database.updateAssignment(data)
     await res.status(200).json(response)
@@ -84,7 +84,7 @@ router.post('/webhook', async (req, res, next) => {
   try {
     await compareGroups()
     await res.status(200).json({
-      message: 'Completed!'
+      message: 'Completed!',
     })
   } catch (e) {
     next(e)
@@ -101,7 +101,7 @@ router.get('/logs', async (req, res, next) => {
       limit: req.query.limit ? req.query.limit : 25,
       start: req.query.start ? req.query.start : 0,
       order: req.query.order ? req.query.order : 'desc',
-      fields: req.query.fields ? req.query.fields : undefined
+      fields: req.query.fields ? req.query.fields : undefined,
     }
     await logger.query(options, async (err, results) => {
       if (err) {

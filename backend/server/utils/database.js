@@ -26,10 +26,7 @@ class Database {
 
   createAssignment(data) {
     data.id = shortid.generate()
-    return this.db
-      .get('assignments')
-      .push(data)
-      .write()
+    return this.db.get('assignments').push(data).write()
   }
 
   readAllAssignments() {
@@ -38,34 +35,21 @@ class Database {
   }
 
   readSingleAssignment(id) {
-    const data = this.db
-      .get('assignments')
-      .find({ id })
-      .value()
+    const data = this.db.get('assignments').find({ id }).value()
     return data
   }
 
   readSingleAssignmentByTsId(tsid) {
-    const data = this.db
-      .get('assignments')
-      .find({ tsid })
-      .value()
+    const data = this.db.get('assignments').find({ tsid }).value()
     return data
   }
 
   updateAssignment(data) {
-    return this.db
-      .get('assignments')
-      .find({ id: data.id })
-      .assign(data)
-      .write()
+    return this.db.get('assignments').find({ id: data.id }).assign(data).write()
   }
 
   deleteAssignment(id) {
-    return this.db
-      .get('assignments')
-      .remove({ id })
-      .write()
+    return this.db.get('assignments').remove({ id }).write()
   }
 }
 

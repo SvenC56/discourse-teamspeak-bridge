@@ -19,7 +19,7 @@ async function asyncForEach(array, callback) {
   }
 }
 
-exports.compareGroups = async function() {
+exports.compareGroups = async function () {
   let teamSpeakUsers = []
   let discourseUsers = []
 
@@ -29,7 +29,7 @@ exports.compareGroups = async function() {
   } catch (e) {
     logger.log({
       level: 'error',
-      message: e.message
+      message: e.message,
     })
   }
 
@@ -96,6 +96,6 @@ async function compareUsergroups(client, discourseUserList) {
 
   return {
     toAdd,
-    toDelete
+    toDelete,
   }
 }

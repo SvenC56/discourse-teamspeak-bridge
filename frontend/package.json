@@ -8,7 +8,6 @@
     "lint": "vue-cli-service lint",
     "dev": "nodemon --exec vue-cli-service serve",
     "docker": "docker build . -t app && docker run -d -p 8080:8080 app",
-    "lint:teamcity": "eslint src --format node_modules/eslint-teamcity/index.js",
     "prettier": "prettier --config .prettierrc --write ./src/**/*.vue ./**/**/*.js"
   },
   "repository": {
@@ -40,7 +39,7 @@
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vue-moment": "^4.1.0",
-    "vuetify": "^2.2.18"
+    "vuetify": "^2.2.20"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "^4.2.3",
@@ -54,7 +53,6 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^6.2.2",
-    "eslint-teamcity": "^2.2.0",
     "husky": "^4.2.3",
     "prettier": "^2.0.2",
     "sass": "^1.26.3",

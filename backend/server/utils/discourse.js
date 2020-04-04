@@ -11,7 +11,7 @@ class DiscourseServer {
 
     this.config = discourseConfig
     this.axiosInstance = axios.create({
-      baseURL: discourseConfig.host
+      baseURL: discourseConfig.host,
     })
     this.discourseReady = false
     this.groups = []
@@ -25,7 +25,7 @@ class DiscourseServer {
   async init() {
     logger.log({
       level: 'info',
-      message: `Connecting to Discourse server...`
+      message: `Connecting to Discourse server...`,
     })
 
     try {
@@ -36,14 +36,14 @@ class DiscourseServer {
     } catch (e) {
       logger.log({
         level: 'error',
-        message: e.message
+        message: e.message,
       })
       return
     }
 
     logger.log({
       level: 'info',
-      message: `Successfully connected to Discourse server.`
+      message: `Successfully connected to Discourse server.`,
     })
 
     this.setState(true)
@@ -66,7 +66,7 @@ class DiscourseServer {
       } catch (e) {
         logger.log({
           level: 'error',
-          message: e.message
+          message: e.message,
         })
       }
     }
@@ -75,15 +75,15 @@ class DiscourseServer {
   async getUsers() {
     if (this.getState()) {
       const requestBody = stringify({
-        params: `{ "custom_field_name" : "${this.config.custom_field_name}" }`
+        params: `{ "custom_field_name" : "${this.config.custom_field_name}" }`,
       })
       const config = {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           Accept: 'application/json',
           'Api-Key': this.config.apikey,
-          'Api-Username': this.config.user
-        }
+          'Api-Username': this.config.user,
+        },
       }
       try {
         const response = await this.axiosInstance.post(
@@ -96,13 +96,13 @@ class DiscourseServer {
           user_id: user[0],
           name: user[1],
           user_group: user[2],
-          teamspeak_uid: user[3]
+          teamspeak_uid: user[3],
         }))
         return this.users
       } catch (e) {
         logger.log({
           level: 'error',
-          message: e.message
+          message: e.message,
         })
       }
     }

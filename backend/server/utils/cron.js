@@ -10,7 +10,7 @@ cron.schedule(config.get('cronInterval'), async () => {
   } catch (e) {
     logger.log({
       level: 'error',
-      message: e.message
+      message: e.message,
     })
   }
 })
