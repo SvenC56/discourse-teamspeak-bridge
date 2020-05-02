@@ -39,7 +39,7 @@
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-moment": "^4.1.0",
-    "vuetify": "^2.2.23"
+    "vuetify": "^2.2.26"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "^4.3.1",
@@ -55,7 +55,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
-    "sass": "^1.26.3",
+    "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-docker": "^0.2.2",
     "vue-cli-plugin-vuetify": "^2.0.5",
