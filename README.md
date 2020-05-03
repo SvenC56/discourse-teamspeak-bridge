@@ -1,7 +1,5 @@
 # Discourse - TeamSpeak 3 Server Bridge
 
-It Ain't Much But It's Honest Work
-
 [![Build Status](https://drone.sc-web.de/api/badges/SvenC56/discourse-teamspeak-bridge/status.svg)](https://drone.sc-web.de/SvenC56/discourse-teamspeak-bridge)
 
 ## Getting started
