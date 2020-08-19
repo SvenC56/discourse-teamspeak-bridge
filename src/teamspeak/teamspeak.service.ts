@@ -101,4 +101,30 @@ export class TeamspeakService {
       this.logger.error(e.message);
     }
   }
+
+  // async addClientUserGroup(client, sgArray) {
+  //   try {
+  //     sgArray.forEach(async (sgid) => {
+  //       await this.ts.serverGroupAddClient(client.databaseId, sgid);
+  //     });
+  //     const groupNames = await getGroupNames(sgArray);
+  //   } catch (e) {
+  //     this.logger.error(e.message);
+  //   }
+  // }
 }
+
+// async function getGroupNames(sgArray) {
+//   const groupNames = [];
+//   await asyncForEach(sgArray, async (tsId) => {
+//     const result = await database.readSingleAssignmentByTsId(tsId);
+//     groupNames.push(result.name);
+//   });
+//   return groupNames;
+// }
+
+// async function asyncForEach(array, callback) {
+//   for (let index = 0; index < array.length; index++) {
+//     await callback(array[index], index, array);
+//   }
+// }

@@ -4,6 +4,8 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { stringify } from 'querystring';
+import { DiscourseUser } from './discourse-user.interface';
+import { DiscourseGroup } from './discourse-group.interface';
 
 @Injectable()
 export class DiscourseService {
@@ -14,7 +16,7 @@ export class DiscourseService {
     private httpService: HttpService,
   ) {}
 
-  getGroups(): Observable<AxiosResponse<any>> {
+  getGroups(): Observable<AxiosResponse<DiscourseGroup[]>> {
     try {
       return this.httpService
         .get(`${this.discourseConfig.url}/groups.json`)
@@ -24,7 +26,7 @@ export class DiscourseService {
     }
   }
 
-  getUsers(): Observable<AxiosResponse<any>> {
+  getUsers(): Observable<AxiosResponse<DiscourseUser[]>> {
     const requestBody = stringify({
       params: `{ "custom_field_name" : "${this.discourseConfig.custom_field_name}" }`,
     });

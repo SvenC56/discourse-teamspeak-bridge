@@ -7,6 +7,7 @@ import { DatabaseConfigModule } from './config/database/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TeamspeakModule } from './teamspeak/teamspeak.module';
 import { DiscourseModule } from './discourse/discourse.module';
+import { AssignmentModule } from './assignment/assignment.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DiscourseModule } from './discourse/discourse.module';
     }),
     TeamspeakModule,
     DiscourseModule,
+    AssignmentModule,
   ],
 })
 export class AppModule {}

@@ -3,6 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { DiscourseService } from './discourse.service';
 import { AxiosResponse } from 'axios';
+import { DiscourseUser } from './discourse-user.interface';
+import { DiscourseGroup } from './discourse-group.interface';
 
 @Controller('discourse')
 export class DiscourseController {
@@ -10,13 +12,13 @@ export class DiscourseController {
 
   @Get('groups')
   @ApiTags('discourse')
-  groups(): Observable<AxiosResponse<any>> {
+  groups(): Observable<AxiosResponse<DiscourseGroup[]>> {
     return this.discourseService.getGroups();
   }
 
   @Get('users')
   @ApiTags('discourse')
-  users(): Observable<AxiosResponse<any>> {
+  users(): Observable<AxiosResponse<DiscourseUser[]>> {
     return this.discourseService.getUsers();
   }
 }

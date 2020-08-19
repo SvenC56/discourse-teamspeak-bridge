@@ -7,5 +7,6 @@ import { TeamspeakConfigModule } from 'src/config/teamspeak/config.module';
   imports: [TeamspeakConfigModule],
   providers: [TeamspeakService],
   controllers: [TeamspeakController],
+  exports: [TeamspeakService],
 })
 export class TeamspeakModule {}

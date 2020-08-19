@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   TeamSpeakChannel,
   TeamSpeakClient,
@@ -18,6 +18,7 @@ export class TeamspeakController {
 
   @Get('whoami')
   @ApiTags('teamspeak')
+  @ApiOperation({ summary: 'Get TeamSpeak - Who Am I?' })
   whoami(): Promise<Whoami> {
     return this.teamspeakService.getWhoami();
   }

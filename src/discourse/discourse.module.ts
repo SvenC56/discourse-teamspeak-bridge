@@ -7,5 +7,6 @@ import { DiscourseConfigModule } from 'src/config/discourse/config.module';
   imports: [DiscourseConfigModule, HttpModule],
   providers: [DiscourseService],
   controllers: [DiscourseController],
+  exports: [DiscourseService],
 })
 export class DiscourseModule {}
