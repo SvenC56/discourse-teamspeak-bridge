@@ -1,75 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Discourse - TeamSpeak 3 Server Bridge
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+[![Build Status](https://drone.sc-web.de/api/badges/SvenC56/discourse-teamspeak-bridge/status.svg)](https://drone.sc-web.de/SvenC56/discourse-teamspeak-bridge)
 
-## Description
+## Getting started
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This Bridge Server syncs specified user groups from the Discourse Board to the TeamSpeak 3 Server. The server runs a cronjob every 5 minutes to sync both servers. This server is in early dev stage but it is _fully working_.
 
-## Installation
+On server start the server will create a database file which has to be filled by you. It is a pivot table which contains the Group_ID of Discourse and TeamSpeak3.
 
-```bash
-$ npm install
+### Small Note
+
+By default this project can be accessed by everybody. This is OK if you have it only running locally but if you deploy it on a server which is accessible from the web you have to make sure that this project is protected (e.g. with Basic Auth)!
+
+### Docker
+
+You can simply pull the provided docker image.
+
+[svenc56/discourse-teamspeak-bridge](https://hub.docker.com/r/svenc56/discourse-teamspeak-bridge)
+
+Please add the following environment variables:
+
+```dockerfile
+# Discourse
+ENV DISCOURSE_BASE_URL ''
+ENV DISCOURSE_API_KEY ''
+ENV DISCOURSE_USER ''
+ENV DISCOURSE_CUSTOM_FIELD_NAME ''
+ENV DISCOURSE_USER_LIST_QUERY_ID ''
+ENV DISCOURSE_WEBHOOK_SECRET ''
+# TeamSpeak
+ENV TEAMSPEAK_USERNAME 'serveradmin'
+ENV TEAMSPEAK_PASSWORD ''
+ENV TEAMSPEAK_HOST 'localhost'
+ENV TEAMSPEAK_SERVER_PORT '9987'
+ENV TEAMSPEAK_QUERY_PORT '10011'
+ENV TEAMSPEAK_PROTOCOL 'raw'
+ENV TEAMSPEAK_BOT_NAME 'Bot'
 ```
 
-## Running the app
+### Installing
+
+1.) Install dependencies:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ yarn install
 ```
 
-## Test
+2.) Configure Environment Variables
+
+Edit the `.env.example` file with your data.
+
+3.) Install the [Dataexplorer Plugin](https://meta.discourse.org/t/data-explorer-plugin/32566) in Discourse.
+
+4.) Add the following query:
+
+```sql
+-- [params]
+-- string :custom_field_name
+
+SELECT
+   u.id AS user_id,
+   u.username AS username,
+   g.id AS group_id,
+   ucf.value  AS user_field_value
+FROM
+   users u
+   JOIN user_custom_fields ucf
+         ON ucf.user_id = u.id
+   join
+      group_users gu
+      ON gu.user_id = u.id
+   join
+      GROUPS g
+      ON g.id = gu.group_id
+WHERE  ucf.name = :custom_field_name
+       AND ucf.value <> ''
+ORDER BY g.id
+```
+
+5.) Create a custom Field in Discourse for the TeamSpeak UID.
+
+6.) Then you have to know which userfield name you are searching for.
+
+This query will help you:
+
+```sql
+SELECT * FROM user_custom_fields
+```
+
+## Using the Webhook
+
+This Server provides a Post-URL (`/api/sync/webhook`) where you can trigger the synchronisation process. The Secret can be set in the Environment Variables.
+
+## Running the tests
+
+At the moment no testing is done. This will be a part of future development.
+
+## API Documentation
+
+This application has a full API description available under: `/api/swagger`
+
+## Deployment
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ yarn start:dev
 ```
 
-## Support
+## Built With
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- [Nest.js](https://nestjs.com/)
 
-## Stay in touch
+## Authors
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **SvenC56** - [SvenC56](https://github.com/svenc56)
 
 ## License
 
-  Nest is [MIT licensed](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Acknowledgments
+
+- [TS3-NodeJS-Library](https://github.com/Multivit4min/TS3-NodeJS-Library)
