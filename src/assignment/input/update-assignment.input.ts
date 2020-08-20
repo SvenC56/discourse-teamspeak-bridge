@@ -9,10 +9,6 @@ import {
 } from 'class-validator';
 
 export class UpdateAssignmentInput {
-  @IsNumber()
-  @ApiProperty()
-  id: number;
-
   @IsString()
   @IsOptional()
   @MinLength(4)

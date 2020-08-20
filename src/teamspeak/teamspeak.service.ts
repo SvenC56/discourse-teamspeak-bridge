@@ -12,6 +12,7 @@ import {
   ServerInfo,
   Whoami,
 } from 'ts3-nodejs-library/lib/types/ResponseTypes';
+import { GetParentIdInput } from './input/get-parent-id.input';
 
 @Injectable()
 export class TeamspeakService {
@@ -86,7 +87,10 @@ export class TeamspeakService {
     }
   }
 
-  async getSubChannels(pid: string): Promise<TeamSpeakChannel[]> {
+  async getSubChannels(
+    getParentIdInput: GetParentIdInput,
+  ): Promise<TeamSpeakChannel[]> {
+    const { pid } = getParentIdInput;
     try {
       return this.teamspeak.channelList({ pid });
     } catch (e) {

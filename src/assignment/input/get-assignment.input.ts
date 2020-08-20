@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumberString, IsOptional } from 'class-validator';
+import { IsNumberString } from 'class-validator';
 
 export class GetAssignmentInput {
   @IsNumberString()
-  @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ description: 'ID of the assignment', required: true })
   id: number;
 }

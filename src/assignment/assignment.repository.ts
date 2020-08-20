@@ -2,10 +2,11 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { EntityRepository, Repository } from 'typeorm';
+import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { CreateAssignmentInput } from './input/create-assignment.input';
 import { UpdateAssignmentInput } from './input/update-assignment.input';
 import { Assignment } from './assignment.entity';
+import { GetAssignmentInput } from './input/get-assignment.input';
 
 @EntityRepository(Assignment)
 export class AssignmentRepository extends Repository<Assignment> {
@@ -32,15 +33,15 @@ export class AssignmentRepository extends Repository<Assignment> {
   }
 
   async updateAssignment(
+    getAssignmentInput: GetAssignmentInput,
     updateAssignmentInput: UpdateAssignmentInput,
   ): Promise<Assignment> {
-    const { id, name, shield, dcid, tsid } = updateAssignmentInput;
-    const updatedAssignment = await this.findOne({ id });
-    const date = new Date();
+    const { id } = getAssignmentInput;
+    const { name, shield, dcid, tsid } = updateAssignmentInput;
 
-    if (!name && typeof shield === 'boolean' && !dcid && !tsid) {
-      return updatedAssignment;
-    }
+    const updatedAssignment = await this.findOne({ id });
+
+    const date = new Date();
 
     if (name) {
       updatedAssignment.name = name;
@@ -67,6 +68,13 @@ export class AssignmentRepository extends Repository<Assignment> {
     }
 
     return updatedAssignment;
+  }
+
+  async deleteAssignment(
+    getAssignmentInput: GetAssignmentInput,
+  ): Promise<DeleteResult> {
+    const { id } = getAssignmentInput;
+    return this.delete({ id });
   }
 
   private errorHandler(code) {
