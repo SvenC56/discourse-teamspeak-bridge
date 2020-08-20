@@ -27,8 +27,12 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>('database.user'),
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.name'),
-      synchronize: true,
+      synchronize: this.configService.get<string>('app.env') !== 'production',
+      logging: this.configService.get<string>('app.env') !== 'production',
       entities: this.configService.get<[string]>('database.entities'),
+      migrations: this.configService.get<[string]>('database.migrations'),
+      subscribers: this.configService.get<[string]>('database.subscribers'),
+      migrationsRun: this.configService.get<string>('app.env') === 'production',
     };
   }
 }
