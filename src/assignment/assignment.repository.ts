@@ -9,7 +9,7 @@ import { Assignment } from './assignment.entity';
 
 @EntityRepository(Assignment)
 export class AssignmentRepository extends Repository<Assignment> {
-  async createSync(
+  async createAssignment(
     createAssignmentInput: CreateAssignmentInput,
   ): Promise<Assignment> {
     const { name, shield, dcid, tsid } = createAssignmentInput;
@@ -31,7 +31,7 @@ export class AssignmentRepository extends Repository<Assignment> {
     return assignment;
   }
 
-  async updateSync(
+  async updateAssignment(
     updateAssignmentInput: UpdateAssignmentInput,
   ): Promise<Assignment> {
     const { id, name, shield, dcid, tsid } = updateAssignmentInput;

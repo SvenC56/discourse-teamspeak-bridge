@@ -19,23 +19,25 @@ export class AssignmentService {
     private readonly assignmentRepository: AssignmentRepository,
   ) {}
 
-  async createSync(
+  async createAssignment(
     createAssignmentInput: CreateAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentRepository.createSync(createAssignmentInput);
+    return this.assignmentRepository.createAssignment(createAssignmentInput);
   }
 
-  async updateSync(
+  async updateAssignment(
     updateAssignmentInput: UpdateAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentRepository.updateSync(updateAssignmentInput);
+    return this.assignmentRepository.updateAssignment(updateAssignmentInput);
   }
 
-  async getSyncs(): Promise<Assignment[]> {
+  async getAssignments(): Promise<Assignment[]> {
     return this.assignmentRepository.find();
   }
 
-  async getSync(getAssignmentInput: GetAssignmentInput): Promise<Assignment> {
+  async getAssignment(
+    getAssignmentInput: GetAssignmentInput,
+  ): Promise<Assignment> {
     const { id } = getAssignmentInput;
     return this.assignmentRepository.findOne(+id);
   }

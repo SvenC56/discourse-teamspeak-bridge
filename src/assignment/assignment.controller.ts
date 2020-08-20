@@ -16,10 +16,10 @@ export class AssignmentController {
   @ApiResponse({
     type: Assignment,
   })
-  createSync(
+  createAssignment(
     @Body() createAssignmentInput: CreateAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentService.createSync(createAssignmentInput);
+    return this.assignmentService.createAssignment(createAssignmentInput);
   }
 
   @Patch()
@@ -28,17 +28,17 @@ export class AssignmentController {
   @ApiResponse({
     type: Assignment,
   })
-  updateSync(
+  updateAssignment(
     @Body() updateAssignmentInput: UpdateAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentService.updateSync(updateAssignmentInput);
+    return this.assignmentService.updateAssignment(updateAssignmentInput);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all assignments' })
   @ApiTags('assignment')
-  getSyncs(): Promise<Assignment[]> {
-    return this.assignmentService.getSyncs();
+  getAssignments(): Promise<Assignment[]> {
+    return this.assignmentService.getAssignments();
   }
 
   @Get(':id')
@@ -47,9 +47,9 @@ export class AssignmentController {
   @ApiResponse({
     type: Assignment,
   })
-  getSync(
+  getAssignment(
     @Param() getAssignmentInput: GetAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentService.getSync(getAssignmentInput);
+    return this.assignmentService.getAssignment(getAssignmentInput);
   }
 }
