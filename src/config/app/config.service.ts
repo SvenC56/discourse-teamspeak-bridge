@@ -43,4 +43,15 @@ export class AppConfigService {
   get port(): number {
     return Number(this.configService.get<number>('app.port'));
   }
+
+  /**
+   * return debug mode of application
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof AppConfigService
+   */
+  get debug(): boolean {
+    return this.configService.get<boolean>('app.debug');
+  }
 }

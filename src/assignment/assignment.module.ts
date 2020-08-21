@@ -8,5 +8,6 @@ import { AssignmentRepository } from './assignment.repository';
   imports: [TypeOrmModule.forFeature([AssignmentRepository])],
   providers: [AssignmentService],
   controllers: [AssignmentController],
+  exports: [AssignmentService],
 })
 export class AssignmentModule {}

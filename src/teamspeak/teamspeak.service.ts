@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { async } from 'rxjs';
 import { TeamspeakConfigService } from 'src/config/teamspeak/config.service';
 // TeamSpeak
 import {
@@ -18,7 +19,7 @@ import { GetParentIdInput } from './input/get-parent-id.input';
 export class TeamspeakService {
   private readonly logger = new Logger(TeamspeakService.name);
 
-  teamspeak: TeamSpeak;
+  private teamspeak: TeamSpeak;
   constructor(private readonly teamspeakConfig: TeamspeakConfigService) {
     this.teamspeak = new TeamSpeak(teamspeakConfig.config);
 
@@ -106,29 +107,52 @@ export class TeamspeakService {
     }
   }
 
-  // async addClientUserGroup(client, sgArray) {
-  //   try {
-  //     sgArray.forEach(async (sgid) => {
-  //       await this.ts.serverGroupAddClient(client.databaseId, sgid);
-  //     });
-  //     const groupNames = await getGroupNames(sgArray);
-  //   } catch (e) {
-  //     this.logger.error(e.message);
-  //   }
-  // }
+  async addClientServerGroup(
+    teamspeakClient: TeamSpeakClient,
+    sgArray: number[],
+  ): Promise<any> {
+    try {
+      return this.asyncForEach(sgArray, async (sg) => {
+        return this.teamspeak.serverGroupAddClient(
+          teamspeakClient.databaseId,
+          sg,
+        );
+      });
+    } catch (e) {
+      this.logger.error(e.message);
+    }
+  }
+
+  async removeClientServerGroup(
+    teamspeakClient: TeamSpeakClient,
+    sgArray: number[],
+  ): Promise<any> {
+    try {
+      return this.asyncForEach(sgArray, async (sg) => {
+        return this.teamspeak.serverGroupDelClient(
+          teamspeakClient.databaseId,
+          sg,
+        );
+      });
+    } catch (e) {
+      this.logger.error(e.message);
+    }
+  }
+
+  async sendClientTextMessage(
+    teamspeakClient: TeamSpeakClient,
+    message: string,
+  ): Promise<any> {
+    try {
+      this.teamspeak.sendTextMessage(teamspeakClient.clid, 1, message);
+    } catch (e) {
+      this.logger.error(e.message);
+    }
+  }
+
+  private async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
 }
-
-// async function getGroupNames(sgArray) {
-//   const groupNames = [];
-//   await asyncForEach(sgArray, async (tsId) => {
-//     const result = await database.readSingleAssignmentByTsId(tsId);
-//     groupNames.push(result.name);
-//   });
-//   return groupNames;
-// }
-
-// async function asyncForEach(array, callback) {
-//   for (let index = 0; index < array.length; index++) {
-//     await callback(array[index], index, array);
-//   }
-// }

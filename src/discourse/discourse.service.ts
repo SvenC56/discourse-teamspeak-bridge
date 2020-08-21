@@ -1,11 +1,9 @@
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { DiscourseConfigService } from 'src/config/discourse/config.service';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
 import { stringify } from 'querystring';
 import { DiscourseUser } from './discourse-user.interface';
-import { DiscourseGroup } from './discourse-group.interface';
+import { DiscourseGroup } from './interface/discourse-group.interface';
 
 @Injectable()
 export class DiscourseService {
@@ -16,17 +14,20 @@ export class DiscourseService {
     private httpService: HttpService,
   ) {}
 
-  getGroups(): Observable<AxiosResponse<DiscourseGroup[]>> {
+  async getGroups(): Promise<DiscourseGroup[]> {
     try {
-      return this.httpService
+      const response: DiscourseGroup[] = await this.httpService
         .get(`${this.discourseConfig.url}/groups.json`)
-        .pipe(map((response) => response.data.groups));
+        .pipe(map((response) => response.data.groups))
+        .toPromise();
+      const groups = response;
+      return groups;
     } catch (e) {
       this.logger.error(e.message);
     }
   }
 
-  getUsers(): Observable<AxiosResponse<DiscourseUser[]>> {
+  async getUsers(): Promise<DiscourseUser[]> {
     const requestBody = stringify({
       params: `{ "custom_field_name" : "${this.discourseConfig.custom_field_name}" }`,
     });
@@ -41,7 +42,7 @@ export class DiscourseService {
     };
 
     try {
-      return this.httpService
+      const response: DiscourseUser[] = await this.httpService
         .post(
           `${this.discourseConfig.url}/admin/plugins/explorer/queries/${this.discourseConfig.user_list_query_id}/run`,
           requestBody,
@@ -56,7 +57,9 @@ export class DiscourseService {
               teamspeak_uid: user[3],
             }));
           }),
-        );
+        )
+        .toPromise();
+      return response;
     } catch (e) {
       this.logger.error(e.message);
     }

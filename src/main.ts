@@ -22,6 +22,7 @@ async function bootstrap() {
     .addTag('discourse')
     .addTag('teamspeak')
     .addTag('assignment')
+    .addTag('sync')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api/swagger', app, document);

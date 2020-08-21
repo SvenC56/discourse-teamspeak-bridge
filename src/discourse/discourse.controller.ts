@@ -1,10 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Observable } from 'rxjs';
 import { DiscourseService } from './discourse.service';
-import { AxiosResponse } from 'axios';
 import { DiscourseUser } from './discourse-user.interface';
-import { DiscourseGroup } from './discourse-group.interface';
+import { DiscourseGroup } from './interface/discourse-group.interface';
 
 @Controller('discourse')
 export class DiscourseController {
@@ -13,14 +11,14 @@ export class DiscourseController {
   @Get('groups')
   @ApiTags('discourse')
   @ApiOperation({ summary: 'Discourse - Group List' })
-  groups(): Observable<AxiosResponse<DiscourseGroup[]>> {
+  groups(): Promise<DiscourseGroup[]> {
     return this.discourseService.getGroups();
   }
 
   @Get('users')
   @ApiTags('discourse')
   @ApiOperation({ summary: 'Discourse - User List' })
-  users(): Observable<AxiosResponse<DiscourseUser[]>> {
+  users(): Promise<DiscourseUser[]> {
     return this.discourseService.getUsers();
   }
 }
