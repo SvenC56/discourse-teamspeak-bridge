@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { AssignmentService } from 'src/assignment/assignment.service';
 import { DiscourseService } from 'src/discourse/discourse.service';
 import { TeamspeakService } from 'src/teamspeak/teamspeak.service';
@@ -9,6 +9,7 @@ import { DiscourseUser } from 'src/discourse/discourse-user.interface';
 import { CompareUsergroupsResponse } from './interface/compare-usergroups-response.interface';
 import { Assignment } from 'src/assignment/assignment.entity';
 import { FilterAssignedGroups } from './interface/filter-assigned-groups.interface';
+import { Cron } from '@nestjs/schedule';
 
 /**
  * Synchronisation service
@@ -21,10 +22,22 @@ export class SyncService {
   private readonly logger = new Logger(SyncService.name);
 
   constructor(
+    @Inject(forwardRef(() => TeamspeakService))
     private readonly teamspeakService: TeamspeakService,
     private readonly discourseService: DiscourseService,
     private readonly assignmentService: AssignmentService,
   ) {}
+
+  /**
+   * Synchronisation every 5 minutes
+   *
+   * @return {*}  {Promise<any>}
+   * @memberof SyncService
+   */
+  @Cron('*/5 * * * *')
+  handleCron(): Promise<any> {
+    return this.compareAllUsers();
+  }
 
   /**
    * Compares a single user with assignments from the database

@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { async } from 'rxjs';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { TeamspeakConfigService } from 'src/config/teamspeak/config.service';
+import { SyncService } from 'src/sync/sync.service';
 // TeamSpeak
 import {
   TeamSpeak,
@@ -20,7 +20,11 @@ export class TeamspeakService {
   private readonly logger = new Logger(TeamspeakService.name);
 
   private teamspeak: TeamSpeak;
-  constructor(private readonly teamspeakConfig: TeamspeakConfigService) {
+  constructor(
+    private readonly teamspeakConfig: TeamspeakConfigService,
+    @Inject(forwardRef(() => SyncService))
+    private readonly syncService: SyncService,
+  ) {
     this.teamspeak = new TeamSpeak(teamspeakConfig.config);
 
     this.teamspeak.on('close', async () => {
@@ -28,12 +32,13 @@ export class TeamspeakService {
     });
 
     this.teamspeak.on('error', (e) => {
-      this.logger.error(e.message);
       switch (true) {
         case /^could not fetch client/.test(e.message): {
+          this.logger.debug(e.message);
           break;
         }
         default: {
+          this.logger.error(e.message);
           break;
         }
       }
@@ -45,6 +50,11 @@ export class TeamspeakService {
         teamspeakConfig.serverPort,
         teamspeakConfig.nickname,
       );
+      await Promise.all([this.teamspeak.registerEvent('server')]);
+    });
+
+    this.teamspeak.on('clientconnect', async (event) => {
+      this.syncService.compareSingleUser(event.client);
     });
   }
 
