@@ -35,7 +35,7 @@ export class SyncService {
    * @memberof SyncService
    */
   @Cron('*/5 * * * *')
-  handleCron(): Promise<any> {
+  private async handleCron(): Promise<any> {
     return this.compareAllUsers();
   }
 
