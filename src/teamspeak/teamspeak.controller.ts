@@ -59,7 +59,7 @@ export class TeamspeakController {
     return this.teamspeakService.getChannels();
   }
 
-  @Get('servergrouplist/:pid')
+  @Get('clientlist/:pid')
   @ApiTags('teamspeak')
   @ApiOperation({ summary: 'TeamSpeak - Get Channel List by Parent ID' })
   subChannelList(
