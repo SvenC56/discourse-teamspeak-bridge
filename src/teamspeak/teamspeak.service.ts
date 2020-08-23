@@ -44,17 +44,22 @@ export class TeamspeakService {
       }
     });
 
+    // this.teamspeak.on('debug', (event) => {
+    //   this.logger.debug(event);
+    // });
+
     this.teamspeak.on('ready', async () => {
       this.logger.log('Connected to TeamSpeak Server!');
       await this.teamspeak.useByPort(
         teamspeakConfig.serverPort,
         teamspeakConfig.nickname,
       );
-      await Promise.all([this.teamspeak.registerEvent('server')]);
-    });
 
-    this.teamspeak.on('clientconnect', async (event) => {
-      this.syncService.compareSingleUser(event.client);
+      await Promise.all([this.teamspeak.registerEvent('server')]);
+
+      this.teamspeak.on('clientconnect', async (event) => {
+        this.syncService.compareSingleUser(event.client);
+      });
     });
   }
 
