@@ -15,7 +15,7 @@ import { SyncModule } from './sync/sync.module';
   imports: [
     AppConfigModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client/dist'),
+      rootPath: join(__dirname, '..', 'frontend/dist'),
     }),
     TypeOrmModule.forRootAsync({
       imports: [DatabaseConfigModule],
