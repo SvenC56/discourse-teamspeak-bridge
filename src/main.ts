@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import { AppConfigService } from './config/app/config.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
 
   // Get app config for cors settings and starting the app.
   const appConfig: AppConfigService = app.get('AppConfigService');
@@ -13,6 +13,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.setGlobalPrefix('api');
+
+  // CORS
+  if (appConfig.env === 'production') {
+    app.enableCors();
+  }
 
   // Swagger OpenAPI Documentation
   const options = new DocumentBuilder()
