@@ -1,0 +1,14 @@
+# backend
+dist/
+documentation/
+node_modules/
+orm.config.json
+.env
+.env.example
+
+#frontend
+frontend/.nuxt/
+frontend/dist/
+frontend/node_modules/
+frontend/.env
+frontend/.env.example
