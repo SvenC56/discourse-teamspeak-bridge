@@ -1,5 +1,7 @@
 # Discourse - TeamSpeak 3 Server Bridge
 
+[![Build Status](https://drone.sc-web.de/api/badges/SvenC56/discourse-teamspeak-bridge/status.svg)](https://drone.sc-web.de/SvenC56/discourse-teamspeak-bridge)
+
 ## Getting started
 
 This Bridge Server syncs specified user groups from the Discourse Board to the TeamSpeak 3 Server. The server runs a cronjob every 5 minutes to sync both servers. This server is in early dev stage but it is _fully working_.
