@@ -4,6 +4,7 @@
       <v-data-table
         :headers="headers"
         :items="assignments"
+        :loading="loading"
         sort-by="calories"
         class="elevation-1"
       >
@@ -31,35 +32,40 @@
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="8">
                         <v-text-field
                           v-model="editedItem.name"
-                          label="Dessert name"
+                          label="Assignment name"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.calories"
-                          label="Calories"
-                        ></v-text-field>
+                      <v-col cols="12" sm="4">
+                        <v-checkbox
+                          v-model="editedItem.shield"
+                          label="Protected Usergroup?"
+                        ></v-checkbox>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.fat"
-                          label="Fat (g)"
-                        ></v-text-field>
+                      <v-col cols="12" sm="6">
+                        <span>Discourse Group</span>
+                        <v-select
+                          v-model.number="editedItem.dcid"
+                          :items="discourseGroups"
+                          item-text="name"
+                          item-value="id"
+                          single-line
+                          class="mt-0 pt-0"
+                        ></v-select>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.carbs"
-                          label="Carbs (g)"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="editedItem.protein"
-                          label="Protein (g)"
-                        ></v-text-field>
+                      <v-col cols="12" sm="6">
+                        <span>TeamSpeak Servergroup</span>
+                        <v-select
+                          v-model.number="editedItem.tsid"
+                          type="number"
+                          :items="teamspeakGroupsFixed"
+                          item-text="name"
+                          item-value="sgid"
+                          single-line
+                          class="mt-0 pt-0"
+                        ></v-select>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -96,9 +102,6 @@
           </v-icon>
           <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
         </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
-        </template>
       </v-data-table>
     </v-flex>
   </v-layout>
@@ -121,23 +124,23 @@ export default {
       ],
       editedIndex: -1,
       editedItem: {
+        id: 0,
         name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        shield: false,
+        dcid: 0,
+        tsid: 0,
       },
       defaultItem: {
         name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        shield: false,
+        dcid: 0,
+        tsid: 0,
       },
       discourseGroups: [],
       teamspeakGroups: [],
+      teamspeakGroupsFixed: [],
       assignments: [],
-      loaded: false,
+      loading: true,
     }
   },
 
@@ -151,27 +154,66 @@ export default {
     dialog(val) {
       val || this.close()
     },
+    teamspeakGroups: {
+      handler(val) {
+        this.teamspeakGroupsFixed = val.map((sg) => ({
+          ...sg,
+          sgid: parseInt(sg.sgid, 10),
+        }))
+      },
+      deep: true,
+    },
   },
 
-  async mounted({ $axios }) {
-    this.loaded = false
-    this.discourseGroups = await $axios.$get('/api/discourse/groups')
-    this.teamspeakGroups = await $axios.$get('/api/teamspeak/servergrouplist')
-    this.assignments = await $axios.$get('/api/assignment')
-    this.loaded = true
+  async mounted() {
+    await this.getData()
   },
 
   methods: {
+    async getData() {
+      this.loading = true
+      await Promise.all([
+        this.getTeamSpeakGroups(),
+        this.getDiscourseGroups(),
+        this.getAssignments(),
+      ])
+      this.loading = false
+    },
+
+    async getTeamSpeakGroups() {
+      this.teamspeakGroups = await this.$axios.$get(
+        '/api/teamspeak/servergrouplist'
+      )
+    },
+
+    async getDiscourseGroups() {
+      this.discourseGroups = await this.$axios.$get('/api/discourse/groups')
+    },
+
+    async getAssignments() {
+      this.assignments = await this.$axios.$get('/api/assignment')
+    },
+
     editItem(item) {
+      this.error = null
       this.editedIndex = this.assignments.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem(item) {
+    async deleteItem(item) {
       const index = this.assignments.indexOf(item)
-      confirm('Are you sure you want to delete this item?') &&
+      const id = this.assignments[index].id
+      const isConfirmed = confirm('Are you sure you want to delete this item?')
+      if (isConfirmed) {
+        try {
+          await this.$axios.delete(`/api/assignment/${id}`)
+        } catch (e) {
+          this.error = e.response
+          return
+        }
         this.assignments.splice(index, 1)
+      }
     },
 
     close() {
@@ -182,11 +224,33 @@ export default {
       })
     },
 
-    save() {
+    async save() {
+      const id = this.editedItem.id
+      delete this.editedItem.id
       if (this.editedIndex > -1) {
-        Object.assign(this.assignments[this.editedIndex], this.editedItem)
+        // Update item
+        try {
+          const response = await this.$axios.patch(
+            `/api/assignment/${id}`,
+            this.editedItem
+          )
+          Object.assign(this.assignments[this.editedIndex], response.data)
+        } catch (e) {
+          this.error = e.response
+          return
+        }
       } else {
-        this.assignments.push(this.editedItem)
+        // Create new item
+        try {
+          const response = await this.$axios.post(
+            '/api/assignment',
+            this.editedItem
+          )
+          this.assignments.push(response.data)
+        } catch (e) {
+          this.error = e.response
+          return
+        }
       }
       this.close()
     },
