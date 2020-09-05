@@ -3,7 +3,6 @@
 ## Getting started
 
 This Bridge Server syncs specified user groups from the Discourse Board to the TeamSpeak 3 Server. The server runs a cronjob every 5 minutes to sync both servers. This server is in early dev stage but it is _fully working_.
-
 On server start the server will create a database file which has to be filled by you. It is a pivot table which contains the Group_ID of Discourse and TeamSpeak3.
 
 ### Small Note
@@ -16,25 +15,10 @@ You can simply pull the provided docker image.
 
 [svenc56/discourse-teamspeak-bridge](https://hub.docker.com/r/svenc56/discourse-teamspeak-bridge)
 
-Please add the following environment variables:
+Please add the following environment variables depending on your setup:
 
-```dockerfile
-# Discourse
-ENV DISCOURSE_BASE_URL ''
-ENV DISCOURSE_API_KEY ''
-ENV DISCOURSE_USER ''
-ENV DISCOURSE_CUSTOM_FIELD_NAME ''
-ENV DISCOURSE_USER_LIST_QUERY_ID ''
-ENV DISCOURSE_WEBHOOK_SECRET ''
-# TeamSpeak
-ENV TEAMSPEAK_USERNAME 'serveradmin'
-ENV TEAMSPEAK_PASSWORD ''
-ENV TEAMSPEAK_HOST 'localhost'
-ENV TEAMSPEAK_SERVER_PORT '9987'
-ENV TEAMSPEAK_QUERY_PORT '10011'
-ENV TEAMSPEAK_PROTOCOL 'raw'
-ENV TEAMSPEAK_BOT_NAME 'Bot'
-```
+- [SQLite](sqlite.env.example)
+- [MySQL/ Postgres](mysql.env.example)
 
 ### Installing
 
@@ -46,7 +30,7 @@ $ yarn install
 
 2.) Configure Environment Variables
 
-Edit the `.env.example` file with your data.
+Edit the `.env.*.example` file with your data.
 
 3.) Install the [Dataexplorer Plugin](https://meta.discourse.org/t/data-explorer-plugin/32566) in Discourse.
 
@@ -86,14 +70,6 @@ This query will help you:
 SELECT * FROM user_custom_fields
 ```
 
-## Using the Webhook
-
-This Server provides a Post-URL (`/api/sync/webhook`) where you can trigger the synchronisation process. The Secret can be set in the Environment Variables.
-
-## Running the tests
-
-At the moment no testing is done. This will be a part of future development.
-
 ## API Documentation
 
 This application has a full API description available under: `/api/swagger`
@@ -115,7 +91,3 @@ $ yarn start:dev
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-- [TS3-NodeJS-Library](https://github.com/Multivit4min/TS3-NodeJS-Library)
