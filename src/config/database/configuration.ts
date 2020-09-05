@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('database', () => ({
-  type: 'mysql',
+  type: process.env.DATABASE_TYPE || 'sqlite',
   host: process.env.DATABASE_HOST || 'localhost',
   port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
   name: process.env.DATABASE_NAME || 'sync',

@@ -22,7 +22,7 @@ export class AssignmentRepository extends Repository<Assignment> {
     assignment.dcid = dcid;
     assignment.tsid = tsid;
     assignment.createdAt = date;
-    assignment.updatedAt = date;
+    assignment.updatedAt = null;
 
     try {
       await assignment.save();

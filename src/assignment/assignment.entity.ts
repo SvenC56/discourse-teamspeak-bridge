@@ -24,9 +24,15 @@ export class Assignment extends BaseEntity {
   @Column()
   dcid: number;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', nullable: true })
+  @UpdateDateColumn({
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
   updatedAt: Date;
 }

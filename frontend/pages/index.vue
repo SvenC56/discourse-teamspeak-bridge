@@ -87,14 +87,10 @@
           <v-icon v-else small> mdi-checkbox-blank-circle-outline </v-icon>
         </template>
         <template v-slot:[`item.createdAt`]="{ item }">
-          <span>
-            {{ $moment(item.createdAt).startOf('minute').fromNow() }}</span
-          >
+          <span v-text="getRelativeTimestamp(item.createdAt)"></span>
         </template>
         <template v-slot:[`item.updatedAt`]="{ item }">
-          <span>
-            {{ $moment(item.updatedAt).startOf('minute').fromNow() }}</span
-          >
+          <span v-text="getRelativeTimestamp(item.updatedAt)"> </span>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">
@@ -192,6 +188,12 @@ export default {
 
     async getAssignments() {
       this.assignments = await this.$axios.$get('/api/assignment')
+    },
+
+    getRelativeTimestamp(timestamp) {
+      return timestamp !== null
+        ? this.$moment(timestamp).startOf('minute').fromNow()
+        : ''
     },
 
     editItem(item) {

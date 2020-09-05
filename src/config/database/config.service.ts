@@ -20,19 +20,35 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
    * @memberof DatabaseConfigService
    */
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    return {
-      type: 'mysql',
-      host: this.configService.get<string>('database.host'),
-      port: this.configService.get<number>('database.port'),
-      username: this.configService.get<string>('database.user'),
-      password: this.configService.get<string>('database.password'),
-      database: this.configService.get<string>('database.name'),
-      synchronize: this.configService.get<string>('app.env') !== 'production',
-      logging: this.configService.get<boolean>('app.debug'),
-      entities: this.configService.get<[string]>('database.entities'),
-      migrations: this.configService.get<[string]>('database.migrations'),
-      subscribers: this.configService.get<[string]>('database.subscribers'),
-      migrationsRun: this.configService.get<string>('app.env') === 'production',
-    };
+    const type = this.configService.get<string>('database.type');
+    if (type === 'mysql' || type === 'postgres') {
+      return {
+        type: type,
+        host: this.configService.get<string>('database.host'),
+        port: this.configService.get<number>('database.port'),
+        username: this.configService.get<string>('database.user'),
+        password: this.configService.get<string>('database.password'),
+        database: this.configService.get<string>('database.name'),
+        synchronize: this.configService.get<string>('app.env') !== 'production',
+        logging: this.configService.get<boolean>('app.debug'),
+        entities: this.configService.get<[string]>('database.entities'),
+        migrations: this.configService.get<[string]>('database.migrations'),
+        subscribers: this.configService.get<[string]>('database.subscribers'),
+        migrationsRun:
+          this.configService.get<string>('app.env') === 'production',
+      };
+    } else {
+      return {
+        type: 'sqlite',
+        database: __dirname + '/../../../database/database.db',
+        synchronize: this.configService.get<string>('app.env') !== 'production',
+        logging: this.configService.get<boolean>('app.debug'),
+        entities: this.configService.get<[string]>('database.entities'),
+        migrations: this.configService.get<[string]>('database.migrations'),
+        subscribers: this.configService.get<[string]>('database.subscribers'),
+        migrationsRun:
+          this.configService.get<string>('app.env') === 'production',
+      };
+    }
   }
 }

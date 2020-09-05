@@ -41,3 +41,6 @@ lerna-debug.log*
 
 # TypeORM
 orm.config.json
+
+# Database
+/database
