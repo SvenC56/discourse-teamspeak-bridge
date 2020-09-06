@@ -16,9 +16,14 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "docs:generate": "npx compodoc -p tsconfig.json",
     "docs:show": "npx compodoc -p tsconfig.json -s --theme material -n 'Discourse TeamSpeak Sync' --hideGenerator",
-    "migration:generate": "ts-node node_modules/typeorm/cli.js migration:generate --config ./orm.config.json --name",
-    "migration:run": "ts-node node_modules/typeorm/cli.js migration:run --config ./orm.config.json",
-    "migration:revert": "ts-node node_modules/typeorm/cli.js migration:revert --config ./orm.config.json"
+    "migration:sqlite:create": "ts-node node_modules/typeorm/cli.js migration:create --config ./src/database/ormconfig.sqlite.ts --name",
+    "migration:sqlite:generate": "ts-node node_modules/typeorm/cli.js migration:generate --config ./src/database/ormconfig.sqlite.ts --name",
+    "migration:sqlite:run": "ts-node node_modules/typeorm/cli.js migration:run --config ./src/database/ormconfig.sqlite.ts",
+    "migration:sqlite:revert": "ts-node node_modules/typeorm/cli.js migration:revert --config ./src/database/ormconfig.sqlite.ts",
+    "migration:mysql:create": "ts-node node_modules/typeorm/cli.js migration:create --config ./src/database/ormconfig.mysql.ts --name",
+    "migration:mysql:generate": "ts-node node_modules/typeorm/cli.js migration:generate --config ./src/database/ormconfig.mysql.ts --name",
+    "migration:mysql:run": "ts-node node_modules/typeorm/cli.js migration:run --config ./src/database/ormconfig.mysql.ts",
+    "migration:mysql:revert": "ts-node node_modules/typeorm/cli.js migration:revert --config ./src/database/ormconfig.mysql.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.4.4",

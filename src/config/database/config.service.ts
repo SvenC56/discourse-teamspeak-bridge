@@ -32,8 +32,8 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         synchronize: this.configService.get<string>('app.env') !== 'production',
         logging: this.configService.get<boolean>('app.debug'),
         entities: this.configService.get<[string]>('database.entities'),
-        migrations: this.configService.get<[string]>('database.migrations'),
-        subscribers: this.configService.get<[string]>('database.subscribers'),
+        migrations: [__dirname + '/../../database/migrations-mysql/*.{js,ts}'],
+        subscribers: [__dirname + '/../../database/subscriber-mysql/*.{js,ts}'],
         migrationsRun:
           this.configService.get<string>('app.env') === 'production',
       };
@@ -44,8 +44,10 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
         synchronize: this.configService.get<string>('app.env') !== 'production',
         logging: this.configService.get<boolean>('app.debug'),
         entities: this.configService.get<[string]>('database.entities'),
-        migrations: this.configService.get<[string]>('database.migrations'),
-        subscribers: this.configService.get<[string]>('database.subscribers'),
+        migrations: [__dirname + '/../../database/migrations-sqlite/*.{js,ts}'],
+        subscribers: [
+          __dirname + '/../../database/subscriber-sqlite/*.{js,ts}',
+        ],
         migrationsRun:
           this.configService.get<string>('app.env') === 'production',
       };
