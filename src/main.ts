@@ -1,10 +1,11 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/app/config.service';
 
 async function bootstrap() {
+  const logger = new Logger('Server');
   const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
 
   // Get app config for cors settings and starting the app.
@@ -16,6 +17,7 @@ async function bootstrap() {
 
   // CORS
   if (appConfig.env === 'production') {
+    logger.log(`CORS is activated!`);
     app.enableCors();
   }
 
@@ -33,6 +35,6 @@ async function bootstrap() {
   SwaggerModule.setup('api/swagger', app, document);
 
   await app.listen(appConfig.port);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`Application is running on port: ${appConfig.port}`);
 }
 bootstrap();
