@@ -177,17 +177,15 @@ export default {
     },
 
     async getTeamSpeakGroups() {
-      this.teamspeakGroups = await this.$axios.$get(
-        '/api/teamspeak/servergrouplist'
-      )
+      this.teamspeakGroups = await this.$axios.$get('teamspeak/servergrouplist')
     },
 
     async getDiscourseGroups() {
-      this.discourseGroups = await this.$axios.$get('/api/discourse/groups')
+      this.discourseGroups = await this.$axios.$get('discourse/groups')
     },
 
     async getAssignments() {
-      this.assignments = await this.$axios.$get('/api/assignment')
+      this.assignments = await this.$axios.$get('assignment')
     },
 
     getRelativeTimestamp(timestamp) {

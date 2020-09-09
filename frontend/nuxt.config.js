@@ -67,13 +67,25 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt-community/proxy-module
+    '@nuxtjs/proxy',
     '@nuxtjs/pwa',
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: '/api/',
+    browserBaseURL: '/api/',
+  },
+
+  // Doc: https://github.com/nuxt-community/proxy-module#object-mode
+  proxy: {
+    // Simple proxy
+    '/api': 'http://localhost:3000',
+  },
+
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
