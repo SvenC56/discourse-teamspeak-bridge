@@ -207,7 +207,7 @@ export default {
       const isConfirmed = confirm('Are you sure you want to delete this item?')
       if (isConfirmed) {
         try {
-          await this.$axios.delete(`/api/assignment/${id}`)
+          await this.$axios.delete(`assignment/${id}`)
         } catch (e) {
           this.error = e.response
           return
@@ -242,10 +242,7 @@ export default {
       } else {
         // Create new item
         try {
-          const response = await this.$axios.post(
-            '/api/assignment',
-            this.editedItem
-          )
+          const response = await this.$axios.post('assignment', this.editedItem)
           this.assignments.push(response.data)
         } catch (e) {
           this.error = e.response
