@@ -231,7 +231,7 @@ export default {
         // Update item
         try {
           const response = await this.$axios.patch(
-            `/api/assignment/${id}`,
+            `assignment/${id}`,
             this.editedItem
           )
           Object.assign(this.assignments[this.editedIndex], response.data)
