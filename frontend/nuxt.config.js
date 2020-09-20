@@ -2,11 +2,6 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   /*
-   ** Nuxt rendering mode
-   ** See https://nuxtjs.org/api/configuration-mode
-   */
-  mode: 'universal',
-  /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
    */
@@ -58,8 +53,8 @@ export default {
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
     '@nuxtjs/vuetify',
-    // Doc: https://github.com/nuxt-community/moment-module#readme
-    '@nuxtjs/moment',
+    // Doc: https://github.com/nuxt-community/dayjs-module
+    '@nuxtjs/dayjs',
   ],
   /*
    ** Nuxt.js modules
