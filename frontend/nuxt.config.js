@@ -45,13 +45,14 @@ export default {
    */
   components: true,
   /*
-   ** Nuxt.js dev-modules
+   ** Nuxt.js Build Modules
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
+    // Doc: https://github.com/nuxt-community/vuetify-module
     '@nuxtjs/vuetify',
     // Doc: https://github.com/nuxt-community/dayjs-module
     '@nuxtjs/dayjs',
