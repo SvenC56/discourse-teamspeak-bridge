@@ -1,9 +1,9 @@
 # frontend builder
 FROM node:latest as frontend
 WORKDIR /home/node/app
-COPY ./frontend ./frontend
-RUN yarn install --cwd ./frontend --silent
-RUN yarn --cwd ./frontend generate
+COPY ./frontend .
+RUN yarn install --silent
+RUN yarn generate
 
 # backend builder
 FROM node:latest as backend
@@ -42,7 +42,7 @@ RUN mkdir -p /home/node/app && chown node /home/node/app
 USER node
 WORKDIR /home/node/app
 # Copy Frontend Build
-COPY --chown=node:node --from=frontend /home/node/app/frontend/dist ./frontend/dist
+COPY --chown=node:node --from=frontend /home/node/app/dist ./frontend/dist
 # Copy Backend Build
 COPY --chown=node:node --from=backend /home/node/app/dist ./dist
 # Database for Sqlite
