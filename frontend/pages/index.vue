@@ -69,6 +69,15 @@
                       </v-col>
                     </v-row>
                   </v-container>
+                  <template v-if="error">
+                    <v-alert
+                      v-for="(item, index) of error"
+                      :key="index"
+                      type="error"
+                      v-text="item"
+                    >
+                    </v-alert>
+                  </template>
                 </v-card-text>
 
                 <v-card-actions>
@@ -109,6 +118,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 export default {
   data() {
     return {
+      error: null,
       dialog: false,
       headers: [
         { text: 'ID', value: 'id' },
@@ -219,6 +229,7 @@ export default {
 
     close() {
       this.dialog = false
+      this.error = null
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
@@ -237,7 +248,7 @@ export default {
           )
           Object.assign(this.assignments[this.editedIndex], response.data)
         } catch (e) {
-          this.error = e.response
+          this.error = e.response.data.message
           return
         }
       } else {
@@ -246,7 +257,7 @@ export default {
           const response = await this.$axios.post('assignment', this.editedItem)
           this.assignments.push(response.data)
         } catch (e) {
-          this.error = e.response
+          this.error = e.response.data.message
           return
         }
       }
