@@ -16,22 +16,21 @@ import {
 import { GetParentIdInput } from './input/get-parent-id.input';
 
 @Injectable()
-export class TeamspeakService {
+export class TeamspeakService extends TeamSpeak {
   private readonly logger = new Logger(TeamspeakService.name);
 
-  private teamspeak: TeamSpeak;
   constructor(
     private readonly teamspeakConfig: TeamspeakConfigService,
     @Inject(forwardRef(() => SyncService))
     private readonly syncService: SyncService,
   ) {
-    this.teamspeak = new TeamSpeak(teamspeakConfig.config);
+    super(teamspeakConfig.config);
 
-    this.teamspeak.on('close', async () => {
-      await this.teamspeak.reconnect(-1, 1000);
+    this.on('close', async () => {
+      await this.reconnect(-1, 1000);
     });
 
-    this.teamspeak.on('error', (e) => {
+    this.on('error', (e) => {
       switch (true) {
         case /^could not fetch client/.test(e.message): {
           this.logger.debug(e.message);
@@ -48,16 +47,16 @@ export class TeamspeakService {
     //   this.logger.debug(event);
     // });
 
-    this.teamspeak.on('ready', async () => {
+    this.on('ready', async () => {
       this.logger.log('Connected to TeamSpeak Server!');
-      await this.teamspeak.useByPort(
+      await this.useByPort(
         teamspeakConfig.serverPort,
         teamspeakConfig.nickname,
       );
 
-      await Promise.all([this.teamspeak.registerEvent('server')]);
+      await Promise.all([this.registerEvent('server')]);
 
-      this.teamspeak.on('clientconnect', async (event) => {
+      this.on('clientconnect', async (event) => {
         this.syncService.compareSingleUser(event.client);
       });
     });
@@ -65,7 +64,7 @@ export class TeamspeakService {
 
   async getWhoami(): Promise<Whoami> {
     try {
-      return this.teamspeak.whoami();
+      return this.whoami();
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -73,7 +72,7 @@ export class TeamspeakService {
 
   async getServerInfo(): Promise<ServerInfo> {
     try {
-      return this.teamspeak.serverInfo();
+      return this.serverInfo();
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -81,7 +80,7 @@ export class TeamspeakService {
 
   async getInstanceInfo(): Promise<InstanceInfo> {
     try {
-      return this.teamspeak.instanceInfo();
+      return this.instanceInfo();
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -89,7 +88,7 @@ export class TeamspeakService {
 
   async getServerGroups(): Promise<TeamSpeakServerGroup[]> {
     try {
-      return this.teamspeak.serverGroupList();
+      return this.serverGroupList();
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -97,7 +96,7 @@ export class TeamspeakService {
 
   async getChannels(): Promise<TeamSpeakChannel[]> {
     try {
-      return this.teamspeak.channelList();
+      return this.channelList();
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -108,7 +107,7 @@ export class TeamspeakService {
   ): Promise<TeamSpeakChannel[]> {
     const { pid } = getParentIdInput;
     try {
-      return this.teamspeak.channelList({ pid });
+      return this.channelList({ pid });
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -116,7 +115,7 @@ export class TeamspeakService {
 
   async clientList(): Promise<TeamSpeakClient[]> {
     try {
-      return this.teamspeak.clientList({ clientType: 0 });
+      return this.clientList();
     } catch (e) {
       this.logger.error(e.message);
     }
@@ -128,10 +127,7 @@ export class TeamspeakService {
   ): Promise<any> {
     try {
       return this.asyncForEach(sgArray, async (sg) => {
-        return this.teamspeak.serverGroupAddClient(
-          teamspeakClient.databaseId,
-          sg,
-        );
+        return this.serverGroupAddClient(teamspeakClient.databaseId, sg);
       });
     } catch (e) {
       this.logger.error(e.message);
@@ -144,10 +140,7 @@ export class TeamspeakService {
   ): Promise<any> {
     try {
       return this.asyncForEach(sgArray, async (sg) => {
-        return this.teamspeak.serverGroupDelClient(
-          teamspeakClient.databaseId,
-          sg,
-        );
+        return this.serverGroupDelClient(teamspeakClient.databaseId, sg);
       });
     } catch (e) {
       this.logger.error(e.message);
@@ -159,7 +152,7 @@ export class TeamspeakService {
     message: string,
   ): Promise<any> {
     try {
-      this.teamspeak.sendTextMessage(teamspeakClient.clid, 1, message);
+      this.sendTextMessage(teamspeakClient.clid, 1, message);
     } catch (e) {
       this.logger.error(e.message);
     }
