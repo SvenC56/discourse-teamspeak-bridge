@@ -6,27 +6,30 @@ import { AppConfigService } from './config/app/config.service';
 
 async function bootstrap() {
   const logger = new Logger('Server');
-
   const app = await NestFactory.create(AppModule, {
-    cors: { origin: '*' },
     logger:
-      process.env.ENV == 'development'
+      process.env.ENV === 'development'
         ? ['debug', 'error', 'log', 'verbose', 'warn']
         : ['error', 'warn', 'log'],
   });
 
-  // Get app config for cors settings and starting the app.
-  const appConfig: AppConfigService = app.get('AppConfigService');
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidUnknownValues: true,
+    }),
+  );
 
-  app.useGlobalPipes(new ValidationPipe());
+  // Get app config for cors settings and starting the app.
+  const appConfigService: AppConfigService = app.get('AppConfigService');
 
   app.setGlobalPrefix('api');
 
-  // CORS
-  if (appConfig.env === 'production') {
-    logger.log(`CORS is activated!`);
-    app.enableCors();
-  }
+  // See: https://docs.nestjs.com/security/cors
+  app.enableCors({
+    origin: appConfigService.isProduction ? true : '*',
+  });
 
   // Swagger OpenAPI Documentation
   const options = new DocumentBuilder()
@@ -41,7 +44,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api/swagger', app, document);
 
-  await app.listen(appConfig.port);
-  logger.log(`Application is running on port: ${appConfig.port}`);
+  await app.listen(appConfigService.port);
+  logger.log(`Application is running on port: ${appConfigService.port}`);
 }
 bootstrap();

@@ -1,51 +1,66 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAssignmentInput } from './input/create-assignment.input';
 import { GetAssignmentInput } from './input/get-assignment.input';
 import { UpdateAssignmentInput } from './input/update-assignment.input';
-import { Assignment } from './assignment.entity';
-import { AssignmentRepository } from './assignment.repository';
-import { DeleteResult } from 'typeorm';
+import { Prisma, Assignment } from '@prisma/client';
+
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AssignmentService {
   private readonly logger = new Logger(AssignmentService.name);
 
-  constructor(
-    @InjectRepository(AssignmentRepository)
-    private readonly assignmentRepository: AssignmentRepository,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async createAssignment(
     createAssignmentInput: CreateAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentRepository.createAssignment(createAssignmentInput);
+    const { dcid, name, shield, tsid } = createAssignmentInput;
+
+    const assignment = await this.prisma.assignment.create({
+      data: { name, tsid, dcid, shield },
+    });
+
+    this.logger.log(`Assignment ID: "${assignment.id}" was created.`);
+
+    return assignment;
   }
 
   async updateAssignment(
     getAssignmentInput: GetAssignmentInput,
     updateAssignmentInput: UpdateAssignmentInput,
   ): Promise<Assignment> {
-    return this.assignmentRepository.updateAssignment(
-      getAssignmentInput,
-      updateAssignmentInput,
-    );
+    const { dcid, name, shield, tsid } = updateAssignmentInput;
+
+    const assignment = await this.prisma.assignment.update({
+      where: getAssignmentInput,
+      data: { dcid, name, shield, tsid },
+    });
+
+    this.logger.log(`Assignment ID: "${assignment.id}" was updated.`);
+
+    return assignment;
   }
 
   async getAssignments(): Promise<Assignment[]> {
-    return this.assignmentRepository.find();
+    return this.prisma.assignment.findMany();
   }
 
   async getAssignment(
     getAssignmentInput: GetAssignmentInput,
   ): Promise<Assignment> {
-    const { id } = getAssignmentInput;
-    return this.assignmentRepository.findOne(+id);
+    return this.prisma.assignment.findUnique({ where: getAssignmentInput });
   }
 
   async deleteAssignment(
     getAssignmentInput: GetAssignmentInput,
-  ): Promise<DeleteResult> {
-    return this.assignmentRepository.deleteAssignment(getAssignmentInput);
+  ): Promise<Assignment> {
+    const result = await this.prisma.assignment.delete({
+      where: getAssignmentInput,
+    });
+
+    this.logger.log(`Assignment ID: "${result.id}" was deleted.`);
+
+    return result;
   }
 }

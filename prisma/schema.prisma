@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+  // previewFeatures = [""]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+model Assignment {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  shield    Boolean  @default(false)
+  tsid      Int
+  dcid      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "assignments")
+}
