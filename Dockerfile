@@ -30,7 +30,12 @@ COPY --chown=node:node --from=backend /home/node/app/dist ./dist
 # Install Production Dependencies
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node yarn.lock yarn.lock
-RUN yarn install --silent && yarn add prisma --silent
+RUN yarn install --silent
+
+# Prisma
+RUN yarn global add prisma prisma-dbml-generator --non-interactive --silent
+COPY --chown=node:node prisma .
+RUN yarn db:generate
 
 CMD ["sh", "-c", "yarn start:prod"]
 EXPOSE ${PORT}
