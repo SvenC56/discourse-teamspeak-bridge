@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { QueryProtocol } from './query-protocol.enum';
+import { TeamSpeak } from 'ts3-nodejs-library';
+
 import { TeamSpeakConfig } from './teamspeak-config.interface';
 
 /**
@@ -26,7 +27,9 @@ export class TeamspeakConfigService {
       host: this.configService.get<string>('teamspeak.host'),
       query_port: this.configService.get<number>('teamspeak.query_port'),
       port: this.configService.get<number>('teamspeak.port'),
-      protocol: this.configService.get<QueryProtocol>('teamspeak.protocol'),
+      protocol: this.configService.get<TeamSpeak.QueryProtocol>(
+        'teamspeak.protocol',
+      ),
       username: this.configService.get<string>('teamspeak.user'),
       password: this.configService.get<string>('teamspeak.password'),
       nickname: this.configService.get<string>('teamspeak.bot_name'),

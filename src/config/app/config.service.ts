@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+type environment = 'production' | 'development' | 'test' | 'provision';
+
 /**
  * Service dealing with app config based operations.
  *
@@ -10,6 +12,20 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AppConfigService {
   constructor(private configService: ConfigService) {}
+
+  /**
+   * @returns boolean
+   */
+  get isProduction(): boolean {
+    return this.env === 'production';
+  }
+
+  /**
+   * @returns boolean
+   */
+  get isDevelopment(): boolean {
+    return this.env === 'development';
+  }
 
   /**
    * return application name

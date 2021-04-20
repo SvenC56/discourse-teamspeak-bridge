@@ -1,10 +1,10 @@
-import { QueryProtocol } from './query-protocol.enum';
+import { TeamSpeak } from 'ts3-nodejs-library';
 
 export interface TeamSpeakConfig {
   host: string;
   port: number;
   query_port: number;
-  protocol: QueryProtocol;
+  protocol: TeamSpeak.QueryProtocol;
   username: string;
   password: string;
   nickname: string;

@@ -1,0 +1,13 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Assignment {
+  id Int [pk, increment]
+  name String [unique, not null]
+  shield Boolean [not null, default: false]
+  tsid Int [not null]
+  dcid Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}

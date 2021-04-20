@@ -7,24 +7,21 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { CreateAssignmentInput } from './input/create-assignment.input';
 import { UpdateAssignmentInput } from './input/update-assignment.input';
 import { GetAssignmentInput } from './input/get-assignment.input';
-import { Assignment } from './assignment.entity';
 import { AssignmentService } from './assignment.service';
-import { DeleteResult } from 'typeorm';
+import { Assignment, Prisma } from '@prisma/client';
 
+@ApiTags('assignment')
 @Controller('assignment')
 export class AssignmentController {
   constructor(private readonly assignmentService: AssignmentService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create assignment' })
-  @ApiTags('assignment')
-  @ApiResponse({
-    type: Assignment,
-  })
   createAssignment(
     @Body() createAssignmentInput: CreateAssignmentInput,
   ): Promise<Assignment> {
@@ -33,10 +30,6 @@ export class AssignmentController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update assignment' })
-  @ApiTags('assignment')
-  @ApiResponse({
-    type: Assignment,
-  })
   updateAssignment(
     @Param() getAssignmentInput: GetAssignmentInput,
     @Body() updateAssignmentInput: UpdateAssignmentInput,
@@ -49,17 +42,12 @@ export class AssignmentController {
 
   @Get()
   @ApiOperation({ summary: 'Get all assignments' })
-  @ApiTags('assignment')
   getAssignments(): Promise<Assignment[]> {
     return this.assignmentService.getAssignments();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get single assignment by ID' })
-  @ApiTags('assignment')
-  @ApiResponse({
-    type: Assignment,
-  })
   getAssignment(
     @Param() getAssignmentInput: GetAssignmentInput,
   ): Promise<Assignment> {
@@ -68,10 +56,9 @@ export class AssignmentController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete single assignment by ID' })
-  @ApiTags('assignment')
   deleteAssignment(
     @Param() getAssignmentInput: GetAssignmentInput,
-  ): Promise<DeleteResult> {
+  ): Promise<Assignment> {
     return this.assignmentService.deleteAssignment(getAssignmentInput);
   }
 }

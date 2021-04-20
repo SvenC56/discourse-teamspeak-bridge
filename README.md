@@ -1,7 +1,5 @@
 # Discourse - TeamSpeak 3 Server Bridge
 
-[![Build Status](https://drone.sc-web.de/api/badges/SvenC56/discourse-teamspeak-bridge/status.svg)](https://drone.sc-web.de/SvenC56/discourse-teamspeak-bridge)
-
 ## Getting started
 
 This Bridge Server syncs specified user groups from the Discourse Board to the TeamSpeak 3 Server. The server runs a cronjob every 5 minutes to sync both servers. This server is in early dev stage but it is _fully working_.
@@ -19,8 +17,7 @@ You can simply pull the provided docker image.
 
 Please add the following environment variables depending on your setup:
 
-- [SQLite](sqlite.env.example)
-- [MySQL](mysql.env.example)
+- [Example](.env.example)
 
 ### Installing
 
@@ -32,7 +29,7 @@ $ yarn install
 
 2.) Configure Environment Variables
 
-Edit the `.env.*.example` file with your data.
+Edit the `.env.example` file with your data.
 
 3.) Install the [Dataexplorer Plugin](https://meta.discourse.org/t/data-explorer-plugin/32566) in Discourse.
 

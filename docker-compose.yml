@@ -1,0 +1,46 @@
+version: '3.5'
+
+services:
+  # assignment:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: discourse-teamspeak-bridge
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - db
+
+  teamspeak:
+    image: teamspeak
+    restart: on-failure
+    environment:
+      TS3SERVER_LICENSE: accept
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 30033:30033
+
+  database:
+    image: mariadb
+    restart: on-failure
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sync
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: on-failure
+    container_name: adminer
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql:

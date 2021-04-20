@@ -7,9 +7,9 @@ import { difference, intersectionWith, isEmpty, isEqual } from 'lodash';
 import { TeamSpeakClient } from 'ts3-nodejs-library';
 import { DiscourseUser } from 'src/discourse/discourse-user.interface';
 import { CompareUsergroupsResponse } from './interface/compare-usergroups-response.interface';
-import { Assignment } from 'src/assignment/assignment.entity';
 import { FilterAssignedGroups } from './interface/filter-assigned-groups.interface';
 import { Cron } from '@nestjs/schedule';
+import { Assignment } from '.prisma/client';
 
 /**
  * Synchronisation service
