@@ -10,6 +10,8 @@ FROM node:latest as backend
 WORKDIR /home/node/app
 COPY . .
 RUN yarn install --silent
+# Generate Prisma Client
+RUN yarn db:generate
 RUN yarn build
 
 # Node.JS Runner
