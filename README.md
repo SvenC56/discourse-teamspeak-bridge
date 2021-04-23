@@ -59,6 +59,8 @@ WHERE  ucf.name = :custom_field_name
 ORDER BY g.id
 ```
 
+4.1.) Note the ID of the created query. This is the `DISCOURSE_USER_LIST_QUERY_ID` variable.
+
 5.) Create a custom Field in Discourse for the TeamSpeak UID.
 
 6.) Then you have to know which userfield name you are searching for.
@@ -68,6 +70,14 @@ This query will help you:
 ```sql
 SELECT * FROM user_custom_fields
 ```
+
+6.1) The userfield will look like this: `user_field_X`. This is the `DISCOURSE_CUSTOM_FIELD_NAME` variable.
+
+## Database
+
+After starting the container you will have to run `yarn db:migration:deploy` or `npm run db:migration:deploy` to run the database migrations.
+
+Note: The connection string will look like this: `DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE"`
 
 ## API Documentation
 
