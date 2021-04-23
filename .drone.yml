@@ -1,0 +1,37 @@
+kind: pipeline
+type: docker
+name: default
+
+trigger:
+  event:
+    - cron
+    - tag
+
+steps:
+  - name: docker-tag
+    image: plugins/docker:18.09
+    settings:
+      repo: svenc56/discourse-teamspeak-bridge
+      dockerfile: Dockerfile
+      group: release
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      events: [tag]
+
+  - name: docker-latest
+    image: plugins/docker:18.09
+    settings:
+      repo: svenc56/discourse-teamspeak-bridge
+      dockerfile: Dockerfile
+      group: release
+      tag: ['latest']
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      events: [tag]
