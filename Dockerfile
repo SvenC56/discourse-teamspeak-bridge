@@ -35,7 +35,7 @@ COPY --chown=node:node yarn.lock yarn.lock
 RUN yarn install --silent
 
 # Prisma
-RUN yarn global add prisma prisma-dbml-generator --non-interactive --silent
+RUN yarn add -D prisma prisma-dbml-generator --non-interactive --silent
 COPY --chown=node:node prisma .
 RUN yarn db:generate
 
