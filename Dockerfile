@@ -2,7 +2,6 @@
 FROM node:latest as frontend
 WORKDIR /home/node/app
 COPY ./frontend .
-RUN yarn config set network-timeout 300000
 RUN yarn install --silent
 RUN yarn generate
 
@@ -10,7 +9,6 @@ RUN yarn generate
 FROM node:latest as backend
 WORKDIR /home/node/app
 COPY . .
-RUN yarn config set network-timeout 300000
 RUN yarn install --silent
 # Generate Prisma Client
 RUN yarn db:generate
@@ -34,7 +32,6 @@ COPY --chown=node:node --from=backend /home/node/app/dist ./dist
 # Install Production Dependencies
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node yarn.lock yarn.lock
-RUN yarn config set network-timeout 300000
 RUN yarn install --silent
 
 # Prisma
