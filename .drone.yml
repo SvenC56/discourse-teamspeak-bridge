@@ -6,6 +6,9 @@ trigger:
   event:
     - cron
     - tag
+    - push
+  branch:
+    - master
 
 steps:
   - name: docker-tag
@@ -33,5 +36,3 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-    when:
-      events: [tag]
