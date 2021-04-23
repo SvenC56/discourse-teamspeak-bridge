@@ -3,8 +3,8 @@ dist
 documentation
 node_modules
 .env
-*.env.example
-docker-compose.*.yml
+ .env.example
+docker-compose.yml
 
 #frontend
 frontend/.nuxt
